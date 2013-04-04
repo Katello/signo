@@ -39,7 +39,7 @@ BuildRequires:  %{?scl_prefix}rubygem(net-ldap)
 BuildRequires:  %{?scl_prefix}rubygem(i18n_data) >= 0.2.6
 BuildRequires:  %{?scl_prefix}rubygem(therubyracer)
 BuildRequires:  %{?scl_prefix}rubygem(gettext_i18n_rails)
-BuildRequires:  %{?scl_prefix}rubygem(ldap_fluff) >= 0.1.4
+BuildRequires:  %{?scl_prefix}rubygem(ldap_fluff)
 BuildRequires:  %{?scl_prefix}rubygem(alchemy) >= 1.0.1
 BuildRequires:  %{?scl_prefix}rubygem(ruby-openid)
 BuildRequires:  %{?scl_prefix}rubygem(thin)
