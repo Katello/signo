@@ -1,0 +1,23 @@
+if RUBY_VERSION >= "1.9.3"
+  require 'securerandom'
+else
+  require 'active_support/secure_random'
+end
+
+
+begin
+  if File.exists?('/etc/signo/secret_token')
+    # Read token string from the file.
+    token = IO.read('/etc/signo/secret_token')
+    raise RuntimeError, 'Size is too small' if token.length < 9
+  else
+    token = Configuration.config.secret_token
+  end
+  Sso::Application.config.secret_token = token.chomp
+rescue Exception => e
+  # If anything is wrong make sure the token is random. This is safe even when
+  # Katello is not configured correctly for any reason (but session is lost
+  # after each restart).
+  Rails.logger.warn "Using randomly generated secure token: #{e.message}"
+  Sso::Application.config.secret_token = RUBY_VERSION >= "1.9.3" ? SecureRandom.hex(80) : ActiveSupport::SecureRandom.hex(80)
+end

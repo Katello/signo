@@ -1,0 +1,14 @@
+--- 
+pid: tmp/pids/thin.pid
+address: 127.0.0.1
+wait: 30
+timeout: 30
+port: 5020
+log: /var/log/signo/thin-log.log
+max_conns: 1024
+require: []
+
+max_persistent_conns: 512
+servers: 1
+daemonize: yes
+chdir: /usr/share/signo

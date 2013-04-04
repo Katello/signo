@@ -1,0 +1,9 @@
+Gemfile.lock
+db/openid-store
+doc
+log
+tmp
+config/sso.yml
+bundler.d/local*
+.idea
+.rbenv-gemsets

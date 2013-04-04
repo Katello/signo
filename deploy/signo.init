@@ -1,0 +1,179 @@
+#!/bin/bash
+#
+# Init script for signo
+#
+# chkconfig: - 86 14
+# description: Init script for signo
+
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+if [ -f /etc/sysconfig/signo ]; then
+    . /etc/sysconfig/signo
+fi
+
+prog=signo
+THIN=/usr/share/signo/script/thin
+RETVAL=0
+SIGNO_PREFIX=${SIGNO_PREFIX:-/signo}
+SIGNO_PORT=${SIGNO_PORT:-3000}
+SIGNO_USER=${SIGNO_USER:-signo}
+SIGNO_GROUP=${SIGNO_GROUP:-signo}
+SIGNO_HOME=${SIGNO_HOME:-/usr/share/signo}
+SIGNO_DATA_DIR=${SIGNO_DATA_DIR:-/var/lib/signo}
+SIGNO_ENV=${SIGNO_ENV:-production}
+SIGNO_PIDS=${SIGNO_PIDS:-${SIGNO_HOME}/tmp/pids/thin.*.pid}
+export SIGNO_LOGGING=${SIGNO_LOGGING:-warn}
+export RAILS_RELATIVE_URL_ROOT=$SIGNO_PREFIX
+export RAILS_ENV=$SIGNO_ENV
+THIN_SERVERS=$( awk '/^servers:/ {print $2}' < /etc/signo/thin.yml )
+THIN_PORT=$( awk '/^port:/ {print $2}' < /etc/signo/thin.yml )
+PID_DIR=$( dirname $( echo $SIGNO_PIDS | awk '{print $1}' ) )
+export BUNDLER_EXT_GROUPS
+export BUNDLER_EXT_NOSTRICT
+export BUNDLER_EXT_HOME=$SIGNO_HOME
+
+check_privilege() {
+    runuser -s /bin/sh ${SIGNO_USER} -c "echo x > /dev/null" 2> /dev/null || RETVAL=4
+    if [ 0$RETVAL -eq 4 ]; then
+        echo "User had insufficient privilege";
+        exit $RETVAL
+    fi
+}
+
+status() {
+    for SIGNO_PID in $SIGNO_PIDS
+    do
+        if [ -f ${SIGNO_PID} ]; then
+            pid=`cat ${SIGNO_PID}`
+            #check if proces with pid from the file is running
+            if `ps -p $pid > /dev/null`; then
+                echo "$prog ($pid) is running."
+                RETVAL=0
+            else
+                echo "$prog ($pid) is not running."
+                RETVAL=1
+            fi
+        else
+            echo "$prog is not running."
+            RETVAL=3
+        fi
+    done
+
+    return $RETVAL
+}
+
+status_q() {
+    status &> /dev/null
+    return $?
+}
+
+start() {
+    check_privilege
+
+    echo -n $"Starting $prog: "
+    if status_q; then
+        echo -n $"$prog is already running."
+        RETVAL=0
+        echo_success
+    else
+        cd ${SIGNO_HOME} #rails expects you to run from the root of the app
+        export HOME=
+        RETVAL=0
+        for P in $( seq $THIN_PORT $(( $THIN_PORT + $THIN_SERVERS - 1)) ); do
+            /usr/sbin/lsof -tPni TCP:$P -sTCP:LISTEN > /dev/null && \
+            echo "Something is blocking port $P. THIN could not start." && \
+            RETVAL=1;
+        done
+        if [ 0$RETVAL -eq 0 ]; then
+            $THIN start --user ${SIGNO_USER} \
+                --environment $SIGNO_ENV \
+                --group ${SIGNO_GROUP} \
+                --config /etc/signo/thin.yml \
+                --rackup "${SIGNO_HOME}/config.ru" >/dev/null
+            RETVAL=$?
+        fi
+        if [ 0$RETVAL -eq 0 ]; then
+            echo_success
+        else
+            echo_failure
+        fi
+    fi
+
+    echo
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    $THIN --config /etc/signo/thin.yml stop >/dev/null
+    for P in $( seq $THIN_PORT $(( $THIN_PORT + $THIN_SERVERS - 1)) ); do
+        if [ -f $PID_DIR/thin.$P.pid ]; then
+            killproc -p $PID_DIR/thin.$P.pid
+        fi
+    done
+    echo
+}
+
+restart() {
+    stop
+    start
+}
+
+condstop() {
+    if status_q; then
+        stop
+    else
+        RETVAL=0
+    fi
+}
+
+condrestart() {
+    if status_q; then
+        restart
+    else
+        RETVAL=0
+    fi
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        restart
+        ;;
+    condrestart|try-restart)
+        condrestart
+        ;;
+    condstop)
+        condstop
+        ;;
+    status)
+        status
+        ;;
+    depcheck)
+        # check if required dependencies from Gemfile are installed
+        TMPDIR=$(mktemp -d)
+        pushd $SIGNO_HOME >/dev/null
+          cp -R .bundle/ $TMPDIR
+          cp Gemfile* $TMPDIR
+        popd >/dev/null
+        pushd $TMPDIR >/dev/null
+          bundle install --without 'test development' --local
+        popd >/dev/null
+        rm -rf $TMPDIR
+        ;;
+    *)
+        echo "Usage: {start|stop|restart|condrestart|status|initdb}"
+        exit 1
+        ;;
+esac
+
+exit $RETVAL
+
+# vim:set sw=4 ts=4 et:

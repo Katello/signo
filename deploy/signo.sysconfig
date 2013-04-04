@@ -1,0 +1,26 @@
+# the location where signo is installed
+#SIGNO_HOME=/usr/share/signo
+
+# the location where signo has data
+#SIGNO_DATA_DIR=/var/lib/signo
+
+# the prefix added as part of the base path for accessing
+# the signo web application (e.g. http://0.0.0.0/signo)
+#SIGNO_PREFIX=/signo
+
+# the port which signo web server is running at
+# note that if the signo user is not root, it has to be a > 1024
+#SIGNO_PORT=3000
+
+# the group which runs the web interface
+#SIGNO_GROUP=signo
+
+# the user which runs the web interface
+#SIGNO_USER=signo
+
+# the rails environment in which signo runs
+# (please note the only supported setting is "production")
+#SIGNO_ENV=production
+
+# rails logging level (debug, info, warn, error, and fatal)
+#SIGNO_LOGGING=warn

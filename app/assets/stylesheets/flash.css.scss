@@ -1,0 +1,10 @@
+@import "alchemy/components/login/_login_vars";
+@import "alchemy/components/flash_messages/_flash_messages";
+
+div#notifications {
+  position: relative;
+  width: $login_container_width;
+  margin: 0 auto;
+  padding: 0;
+  height: 41px;
+}

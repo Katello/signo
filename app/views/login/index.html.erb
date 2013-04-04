@@ -1,0 +1,35 @@
+<div class="card" id="login" xmlns="http://www.w3.org/1999/html">
+  <% if session[:username].present? %>
+      <%= _('Logged in as %s') % session[:username] %>, <%= link_to _('logout'), logout_path %><br/>
+      <%= _('Your session will expire at') %> <%= Configuration.config.session_life.hours.from_now %>.
+  <% else %>
+      <%= form_tag login_url, :id => 'login_form', :class => 'form labels_top messages_bottom' do %>
+          <div class="control_group">
+            <div class="label"><%= label_tag :username, _('Username') %></div>
+            <div class="input">
+              <%= text_field_tag :username, params[:username],
+                                 :class => 'username',
+                                 :id    => "username" %>
+            </div>
+          </div>
+          <div class="control_group">
+            <div class="label"><%= label_tag :password, _('Password') %></div>
+            <div class="input"><%= password_field_tag :password, '',
+                                                      :class => 'password',
+                                                      :id    => 'password-input' %>
+            </div>
+          </div>
+          <div class="control_group">
+            <div class="control_group">
+              <div class="right_aligned">
+                <%= submit_tag 'Login', :class => "button primary", :id => 'login_btn' %>
+              </div>
+              <div class="right_aligned">
+                <div class=".spinner">
+                </div>
+              </div>
+            </div>
+          </div>
+      <% end %>
+  <% end %>
+</div>
