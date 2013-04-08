@@ -34,7 +34,6 @@ BuildRequires:  %{?scl_prefix}rubygem(rails) >= 3.2
 BuildRequires:  %{?scl_prefix}rubygem(haml) >= 3.1.2
 BuildRequires:  %{?scl_prefix}rubygem(haml-rails)
 BuildRequires:  %{?scl_prefix}rubygem(compass)
-BuildRequires:  %{?scl_prefix}rubygem(compass-rails)
 BuildRequires:  %{?scl_prefix}rubygem(net-ldap)
 BuildRequires:  %{?scl_prefix}rubygem(i18n_data) >= 0.2.6
 BuildRequires:  %{?scl_prefix}rubygem(therubyracer)

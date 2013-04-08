@@ -45,7 +45,7 @@ gem 'ldap_fluff'
 gem 'logging'
 
 # alchemy dependencies
-gem "compass-rails"
+gem "compass"
 gem "haml-rails"
 # UI
 gem "alchemy", ">= 1.0.1"
