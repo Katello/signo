@@ -111,7 +111,8 @@ echo "# overwrite config options in this file instead of changing sso_defaults.y
     #generate Rails JS/CSS/... assets
     echo Generating Rails assets...
     # temphack to get rid of file without extension
-    sudo rm /opt/rh/ruby193/root/usr/share/gems/gems/alchemy-1.0.1/vendor/assets/javascripts/alchemy/jquery/plugins/flot-0.7/Makefile
+    #rm /opt/rh/ruby193/root/usr/share/gems/gems/alchemy-1.0.1/vendor/assets/javascripts/alchemy/jquery/plugins/flot-0.7/Makefile
+    rm /opt/rh/ruby193/root%{_datadir}/gems/gems/alchemy-1.0.1/vendor/assets/javascripts/alchemy/jquery/plugins/flot-0.7/Makefile
 %{?scl:scl enable %{scl} "}
     LC_ALL="en_US.UTF-8" rake assets:precompile
 %{?scl:"}
