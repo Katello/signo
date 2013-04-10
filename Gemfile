@@ -48,7 +48,7 @@ gem 'logging'
 gem "compass"
 gem "haml-rails"
 # UI
-gem "alchemy", ">= 1.0.1"
+gem "ui_alchemy-rails", ">= 1.0.4"
 
 # Stuff for i18n
 gem 'gettext_i18n_rails'
