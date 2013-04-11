@@ -54,15 +54,6 @@ gem "ui_alchemy-rails", ">= 1.0.4"
 gem 'gettext_i18n_rails'
 gem 'i18n_data', '>= 0.2.6', :require => 'i18n_data'
 
-group :test, :development do
-  gem 'minitest-rails'
-end
-
-group :test do
-  # Requests stubbing
-  gem 'webmock'
-end
-
 Dir[File.expand_path('bundler.d/*.rb', File.dirname(__FILE__))].each do |bundle|
   self.instance_eval(Bundler.read_file(bundle), bundle)
 end
