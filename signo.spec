@@ -9,9 +9,15 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 
-%global scl_prefix %{scl}-
-%global scl_ruby /usr/bin/ruby193-ruby
-%global scl_rake scl enable ruby193 rake
+%if "%{?scl}" == "ruby193"
+    %global scl_prefix %{scl}-
+    %global scl_ruby /usr/bin/ruby193-ruby
+    %global scl_rake scl enable ruby193 rake
+%else
+    %global scl_ruby /usr/bin/ruby
+    %global scl_rake /usr/bin/rake
+%endif
+
 
 %global homedir %{_datarootdir}/%{name}
 %global datadir %{_localstatedir}/%{name}
