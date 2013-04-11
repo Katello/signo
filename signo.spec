@@ -25,7 +25,7 @@
 
 Name:           signo
 Version:        0.0.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        A package for web based SSO for various applications
 BuildArch:      noarch
 
@@ -42,6 +42,7 @@ BuildRequires:  %{?scl_prefix}rubygem(haml-rails)
 BuildRequires:  %{?scl_prefix}rubygem(compass-rails)
 BuildRequires:  %{?scl_prefix}rubygem(coffee-rails) >= 3.2.1
 BuildRequires:  %{?scl_prefix}rubygem(uglifier) >= 1.0.3
+BuildRequires:  %{?scl_prefix}rubygem(jquery-rails) >= 1.0.3
 BuildRequires:  %{?scl_prefix}rubygem(net-ldap)
 BuildRequires:  %{?scl_prefix}rubygem(i18n_data) >= 0.2.6
 BuildRequires:  %{?scl_prefix}rubygem(therubyracer)
