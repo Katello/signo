@@ -25,7 +25,7 @@
 
 Name:           signo
 Version:        0.0.3
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        A package for web based SSO for various applications
 BuildArch:      noarch
 
@@ -257,6 +257,7 @@ test -f $TOKEN || (echo $(</dev/urandom tr -dc A-Za-z0-9 | head -c128) > $TOKEN 
 %files devel
 
 %files devel-test
+%{homedir}/bundler.d/test.rb
 
 %pre
 # Add the "signo" user and group
