@@ -58,6 +58,13 @@ BuildRequires:  %{?scl_prefix}rubygem(minitest-rails)
 BuildRequires:  gettext
 BuildRequires:  translate-toolkit
 
+Requires:  %{?scl_prefix}rubygem(ruby-openid)
+Requires:  %{?scl_prefix}rubygem(sass-rails) >= 3.2.3
+Requires:  %{?scl_prefix}rubygem(coffee-rails) >= 3.2.1
+Requires:  %{?scl_prefix}rubygem(uglifier) >= 1.0.3
+Requires:  %{?scl_prefix}rubygem(compass-rails)
+Requires:  %{?scl_prefix}rubygem(ui_alchemy-rails) >= 1.0.4
+
 BuildRequires: %{?scl_prefix}ruby(abi) = 1.9.1
 BuildRequires: %{?scl_prefix}ruby
 
