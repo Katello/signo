@@ -19,7 +19,8 @@ class Backends::Ldap < Backends::Base
   def do_auth
     ldap = LdapFluff.new(Configuration.config.backends.ldap)
     @result = ldap.authenticate? @username, @password
-  # TODO support LdapFluff::ConfigError when merged in ldap_fluff upstream
+  rescue LdapFluff::ConfigError => e
+    logger.error "LDAP configuration error occured with message #{e.message}"
   rescue Net::LDAP::LdapError => e
     logger.error "An error #{e.class} occured with message #{e.message}"
     logger.error e.backtrace.join("\n")
