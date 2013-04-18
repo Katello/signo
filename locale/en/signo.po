@@ -1,0 +1,42 @@
+# Template file for strings which can be localized in the Signo Application.
+#
+# This file is distributed under the same license as the Signo.
+#
+# Translators:
+# Bryan Kearney
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: version 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-16 16:12+0200\n"
+"PO-Revision-Date: 2013-03-01 15:45-0500\n"
+"Last-Translator: Marek Hulan <mhulan@redhat.com>\n"
+"Language-Team: Foreman Team <foreman-dev@googlegroups.com>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Authentication failed, try again"
+msgstr ""
+
+msgid "Logged in as %s"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Relay Party %s not trusted, consult SSO configuration."
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Your session will expire at"
+msgstr ""
+
+msgid "logout"
+msgstr ""
