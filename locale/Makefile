@@ -1,8 +1,12 @@
 #
-# Makefile for PO merging and MO generation
+# Makefile for PO merging and MO generation. More info in the README.
 #
-
-POTFILE = signo.pot
+# make all-mo (default) - generate MO files
+# make check - check translations using translate-tool
+# make tx-update - download and merge translations from Transifex
+# make clean - clean everything
+#
+POTFILE = foreman.pot
 POFILES = $(shell find . -name '*.po')
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
 POXFILES = $(patsubst %.po,%.pox,$(POFILES))
@@ -14,11 +18,11 @@ POXFILES = $(patsubst %.po,%.pox,$(POFILES))
 all-mo: $(MOFILES)
 
 # Check for malformed strings
-# TODO - enable endwhitespace, endpunc, puncspacing, options filters
 %.pox: %.po
 	msgfmt -c $<
 	pofilter --nofuzzy -t variables -t blank -t urls -t emails -t long -t newlines \
-		-t options -t printf -t validchars --gnome $< > $@
+		-t endwhitespace -t endpunc -t puncspacing -t options -t printf -t validchars --gnome $< > $@
+	cat $@
 	! grep -q msgid $@
 
 check: $(POXFILES)
@@ -34,6 +38,15 @@ uniq-po:
 	for f in $(shell find ./ -name "*.po") ; do \
 		msguniq $$f -o $$f ; \
 	done
+
+tx-pull:
+	tx pull -a -f -r foreman.foreman
+	git commit -a -m 'i18n - updating translations from transifex'
+	-git add -A
+	-git commit -a -m 'i18n - adding new languages from transifex'
+
+tx-update: tx-pull update-po
+	-git commit -a -m 'i18n - merging gettext po files'
 
 # Remove all MO files
 clean:
