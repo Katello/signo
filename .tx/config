@@ -1,3 +1,8 @@
 [main]
 host = https://www.transifex.net
 
+[signo.signo]
+file_filter = locale/<lang>/signo.po
+source_file = locale/signo.pot
+source_lang = en
+
