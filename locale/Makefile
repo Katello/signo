@@ -2,7 +2,7 @@
 # Makefile for PO merging and MO generation
 #
 
-POTFILE = app.pot
+POTFILE = signo.pot
 POFILES = $(shell find . -name '*.po')
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
 POXFILES = $(patsubst %.po,%.pox,$(POFILES))

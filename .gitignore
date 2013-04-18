@@ -7,3 +7,6 @@ config/sso.yml
 bundler.d/local*
 .idea
 .rbenv-gemsets
+locale/*/*.pox
+locale/*/LC_MESSAGES
+locale/*.mo
