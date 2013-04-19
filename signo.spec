@@ -25,7 +25,7 @@
 
 Name:           signo
 Version:        0.0.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A package for web based SSO for various applications
 BuildArch:      noarch
 
