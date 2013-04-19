@@ -177,9 +177,9 @@ install -Dp -m0644 %{confdir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysco
 install -Dp -m0644 %{confdir}/%{name}.httpd.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/katello.d/%{name}.conf
 install -Dp -m0644 %{confdir}/thin.yml %{buildroot}%{_sysconfdir}/%{name}/
 %if 0%{?rhel} == 6
-install -Dp -m0755 %{confdir}/%{name}.service %{buildroot}%{_libdir}/system/%{name}.service
-%else
 install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{_initddir}/%{name}
+%else
+install -Dp -m0755 %{confdir}/%{name}.service %{buildroot}%{_libdir}/system/%{name}.service
 %endif
 
 
