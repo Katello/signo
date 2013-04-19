@@ -1,0 +1,14 @@
+Unit]
+Description=Signo SSO web app service
+Documentation=https://github.com/katello/signo
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+WorkingDirectory=/usr/share/signo
+ExecStart=/usr/share/signo/script/thin start --user $SIGNO_USER --environment $SIGNO_ENV --group $SIGNO_GROUP --config /etc/signo/thin.yml --rackup "$SIGNO_RACKUP"
+EnvironmentFile=-/etc/sysconfig/signo
+Environment=THIN=/usr/share/signo/script/thin "SIGNO_RACKUP=$SIGNO_HOME/config.ru"
+
+[Install]
+WantedBy=multi-user.target

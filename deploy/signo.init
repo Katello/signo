@@ -24,7 +24,6 @@ SIGNO_HOME=${SIGNO_HOME:-/usr/share/signo}
 SIGNO_DATA_DIR=${SIGNO_DATA_DIR:-/var/lib/signo}
 SIGNO_ENV=${SIGNO_ENV:-production}
 SIGNO_PIDS=${SIGNO_PIDS:-${SIGNO_HOME}/tmp/pids/thin.*.pid}
-export SIGNO_LOGGING=${SIGNO_LOGGING:-warn}
 export RAILS_RELATIVE_URL_ROOT=$SIGNO_PREFIX
 export RAILS_ENV=$SIGNO_ENV
 THIN_SERVERS=$( awk '/^servers:/ {print $2}' < /etc/signo/thin.yml )

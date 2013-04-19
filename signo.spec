@@ -174,9 +174,14 @@ chmod 600 %{buildroot}%{_sysconfdir}/%{name}/sso.yml
 
 #copy init scripts and sysconfigs
 install -Dp -m0644 %{confdir}/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{_initddir}/%{name}
 install -Dp -m0644 %{confdir}/%{name}.httpd.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/katello.d/%{name}.conf
 install -Dp -m0644 %{confdir}/thin.yml %{buildroot}%{_sysconfdir}/%{name}/
+%if 0%{?rhel} == 6
+install -Dp -m0755 %{confdir}/%{name}.service %{buildroot}%{_libdir}/system/%{name}.service
+%else
+install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{_initddir}/%{name}
+%endif
+
 
 #overwrite config files with symlinks to /etc/signo
 ln -svf %{_sysconfdir}/%{name}/sso.yml %{buildroot}%{homedir}/config/sso.yml
@@ -191,6 +196,7 @@ rm -f %{buildroot}%{homedir}/bundler.d/.gitkeep
 rm -f %{buildroot}%{homedir}/public/stylesheets/.gitkeep
 rm -f %{buildroot}%{homedir}/vendor/plugins/.gitkeep
 rm -f %{buildroot}%{homedir}/lib/assets/.gitkeep
+rm -f %{buildroot}%{homedir}/lib/tasks/.gitkeep
 
 #correct permissions
 find %{buildroot}%{homedir} -type d -print0 | xargs -0 chmod 755
@@ -199,8 +205,13 @@ chmod +x %{buildroot}%{homedir}/script/*
 
 %post
 
+%if 0%{?rhel} == 6
+# let katello-configure do this
+# /bin/systemctl enable signo
+%else
 #Add /etc/rc*.d links for the script
 /sbin/chkconfig --add %{name}
+%endif
 
 #Signo must read config file
 chown signo:signo %{_sysconfdir}/%{name}/sso.yml
@@ -245,13 +256,19 @@ test -f $TOKEN || (echo $(</dev/urandom tr -dc A-Za-z0-9 | head -c128) > $TOKEN 
 %{homedir}/test
 %{homedir}/tmp
 %{homedir}/vendor
-%dir %{homedir}/.bundle
+%exclude %{homedir}/.bundle
 %{homedir}/config.ru
 %{homedir}/Gemfile
 %{homedir}/Rakefile
 %attr(600, signo, signo) %{_sysconfdir}/%{name}/thin.yml
 %attr(600, signo, signo) %{_sysconfdir}/%{name}/sso.yml
+
+%if 0%{?rhel} == 6
 %{_sysconfdir}/rc.d/init.d/%{name}
+%else
+%{_libdir}/systemd/system/%{name}.service
+%endif
+
 %{_sysconfdir}/sysconfig/%{name}
 
 
@@ -265,6 +282,7 @@ test -f $TOKEN || (echo $(</dev/urandom tr -dc A-Za-z0-9 | head -c128) > $TOKEN 
 %{_sysconfdir}/httpd/conf.d/katello.d/%{name}.conf
 
 %files devel
+# this package just installs dependencies for I18n
 
 %files devel-test
 %{homedir}/bundler.d/test.rb
