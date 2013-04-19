@@ -12,12 +12,9 @@
 %if "%{?scl}" == "ruby193"
     %global scl_prefix %{scl}-
     %global scl_ruby /usr/bin/ruby193-ruby
-    %global scl_rake scl enable ruby193 rake
 %else
     %global scl_ruby /usr/bin/ruby
-    %global scl_rake /usr/bin/rake
 %endif
-
 
 %global homedir %{_datarootdir}/%{name}
 %global datadir %{_localstatedir}/%{name}
@@ -32,7 +29,7 @@ BuildArch:      noarch
 Group:          Applications/Internet
 License:        GPLv2
 URL:            https://fedorahosted.org/katello/wiki/SingleSignOn
-Source0:        https://fedorahosted.org/releases/s/i/signo/%{name}-%{version}.tar.gz
+Source0:        https://github.com/Katello/signo/archive/%{name}-%{version}-%{release}.tar.gz
 
 BuildRequires:  %{?scl_prefix}rubygems
 BuildRequires:  %{?scl_prefix}rubygem(logging) >= 1.8.0
@@ -72,10 +69,18 @@ BuildRequires: %{?scl_prefix}ruby(abi) = 1.9.1
 BuildRequires: %{?scl_prefix}ruby
 
 Requires(pre):    shadow-utils
+Requires(postun): coreutils sed
+
+%if 0%{?rhel} == 6
 Requires(preun):  chkconfig
 Requires(preun):  initscripts
 Requires(post):   chkconfig
-Requires(postun): initscripts coreutils sed
+Requires(postun): initscripts
+%else
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
+%endif
 
 %description
 Web based SSO for various applications
@@ -113,7 +118,7 @@ Rake tasks and dependecies for Signo developers, which enables
 testing.
 
 %prep
-%setup -n %{name}-%{version} -q
+%setup -qn %{name}-%{version}-%{release}
 
 %build
 export RAILS_ENV=build
@@ -192,16 +197,19 @@ ln -sv %{datadir}/openid-store %{buildroot}%{homedir}/db/openid-store
 ln -sv %{datadir}/tmp %{buildroot}%{homedir}/tmp
 
 #remove files which are not needed in the homedir
-rm -f %{buildroot}%{homedir}/bundler.d/.gitkeep
-rm -f %{buildroot}%{homedir}/public/stylesheets/.gitkeep
-rm -f %{buildroot}%{homedir}/vendor/plugins/.gitkeep
-rm -f %{buildroot}%{homedir}/lib/assets/.gitkeep
-rm -f %{buildroot}%{homedir}/lib/tasks/.gitkeep
+find %{buildroot}%{homedir} -name .gitkeep -exec rm -f {} \;
 
 #correct permissions
 find %{buildroot}%{homedir} -type d -print0 | xargs -0 chmod 755
 find %{buildroot}%{homedir} -type f -print0 | xargs -0 chmod 644
 chmod +x %{buildroot}%{homedir}/script/*
+
+%pre
+# Add the "signo" user and group
+getent group %{name} >/dev/null || groupadd -r %{name}
+getent passwd %{name} >/dev/null || \
+    useradd -r -g %{name} -d %{homedir} -s /sbin/nologin -c "Signo" %{name}
+exit 0
 
 %post
 
@@ -212,10 +220,6 @@ chmod +x %{buildroot}%{homedir}/script/*
 #Add /etc/rc*.d links for the script
 /sbin/chkconfig --add %{name}
 %endif
-
-#Signo must read config file
-chown signo:signo %{_sysconfdir}/%{name}/sso.yml
-chown signo:signo %{_sysconfdir}/%{name}/thin.yml
 
 #Generate secret token if the file does not exist
 #(this must be called both for installation and upgrade)
@@ -286,13 +290,6 @@ test -f $TOKEN || (echo $(</dev/urandom tr -dc A-Za-z0-9 | head -c128) > $TOKEN 
 
 %files devel-test
 %{homedir}/bundler.d/test.rb
-
-%pre
-# Add the "signo" user and group
-getent group %{name} >/dev/null || groupadd -r %{name} -g 187
-getent passwd %{name} >/dev/null || \
-    useradd -r -g %{name} -d %{homedir} -u 187 -s /sbin/nologin -c "Signo" %{name}
-exit 0
 
 %preun
 if [ $1 -eq 0 ] ; then
