@@ -29,7 +29,7 @@ BuildArch:      noarch
 Group:          Applications/Internet
 License:        GPLv2
 URL:            https://fedorahosted.org/katello/wiki/SingleSignOn
-Source0:        https://github.com/Katello/signo/archive/%{name}-%{version}-%{release}.tar.gz
+Source0:        https://github.com/Katello/signo/archive/%{name}-%{version}.tar.gz
 
 BuildRequires:  %{?scl_prefix}rubygems
 BuildRequires:  %{?scl_prefix}rubygem(logging) >= 1.8.0
@@ -118,7 +118,7 @@ Rake tasks and dependecies for Signo developers, which enables
 testing.
 
 %prep
-%setup -qn %{name}-%{version}-%{release}
+%setup -n %{name}-%{version} -q
 
 %build
 export RAILS_ENV=build
