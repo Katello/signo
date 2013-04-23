@@ -107,6 +107,8 @@
         enabled: true
       auth:
         enabled: true
+      openid:
+        enabled: true
 
 development:
   :backends:
