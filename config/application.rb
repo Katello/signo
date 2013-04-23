@@ -16,6 +16,12 @@ end
 
 module Sso
   class Application < Rails::Application
+    # we need configuration before autoloading starts to work
+    require 'configuration'
+    require 'signo/configuration/loader'
+    require 'signo/configuration/node'
+    require 'signo/configuration/validator'
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -69,5 +75,7 @@ module Sso
     end
 
     config.logger = Logging.logger['app']
+ 
+    config.relative_url_root = ::Configuration.config.url_prefix
   end
 end

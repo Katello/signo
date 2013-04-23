@@ -14,6 +14,9 @@
   :whitelist:
    - localhost
 
+  # suburi on which signo resides
+  url_prefix: '/signo'
+
   # configuration of all authentication backends
   :backends:
     # these backends will be used to authenticate user (order is significant)

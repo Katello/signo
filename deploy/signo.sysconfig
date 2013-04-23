@@ -1,10 +1,6 @@
 # the location where signo is installed
 SIGNO_HOME=/usr/share/signo
 
-# the prefix added as part of the base path for accessing
-# the signo web application (e.g. http://0.0.0.0/signo)
-SIGNO_PREFIX=/signo
-
 # the group which runs the web interface
 SIGNO_GROUP=signo
 
