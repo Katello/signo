@@ -1,4 +1,4 @@
-Unit]
+[Unit]
 Description=Signo SSO web app service
 Documentation=https://github.com/katello/signo
 After=network.target remote-fs.target nss-lookup.target
