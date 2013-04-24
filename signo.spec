@@ -17,7 +17,7 @@
 %endif
 
 %global homedir %{_datarootdir}/%{name}
-%global datadir %{_localstatedir}/%{name}
+%global datadir %{_localstatedir}/lib/%{name}
 %global confdir deploy
 
 Name:           signo
