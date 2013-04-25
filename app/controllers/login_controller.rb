@@ -7,6 +7,7 @@ require 'openid/store/filesystem'
 class LoginController < ApplicationController
   include OpenID::Server
   layout false, :only => :provider
+  protect_from_forgery :except => :provider
 
   def index
     if is_logged_in? && cookies[:username].blank?

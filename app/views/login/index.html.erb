@@ -7,7 +7,7 @@
           <div class="control_group">
             <div class="label"><%= label_tag :username, _('Username') %></div>
             <div class="input">
-              <%= text_field_tag :username, params[:username],
+              <%= text_field_tag :username, params[:username] || cookies[:username],
                                  :class => 'username',
                                  :id    => "username" %>
             </div>

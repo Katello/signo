@@ -14,7 +14,7 @@ class UsersController < ApplicationController
     end
 
     # content negotiation failed, so just render the user page
-    xrds_url      = url_for(:controller => 'users', :action => params[:username])+'/xrds'
+    xrds_url      = url_for(:controller => 'users', :action => 'show', :username => params[:username])+'/xrds'
     identity_page = <<EOS
 <html><head>
 <meta http-equiv="X-XRDS-Location" content="#{xrds_url}" />
