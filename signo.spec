@@ -21,8 +21,8 @@
 %global confdir deploy
 
 Name:           signo
-Version:        0.0.5
-Release:        2%{?dist}
+Version:        0.0.6
+Release:        1%{?dist}
 Summary:        A package for web based SSO for various applications
 BuildArch:      noarch
 
