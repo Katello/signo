@@ -3,7 +3,7 @@ pid: tmp/pids/thin.pid
 address: 127.0.0.1
 wait: 30
 timeout: 30
-port: 5020
+port: 5220
 log: /var/log/signo/thin-log.log
 max_conns: 1024
 require: []
