@@ -9,11 +9,8 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require_tree .
+ *= require application
+ *= require flash
+ *= require login
+ *= require _look
  */
-
-$login_background_top_color: #0098c2;
-$login_background_bottom_color: #00485c;
-
-@import "alchemy/composites/shell";
-@import "alchemy/composites/login";

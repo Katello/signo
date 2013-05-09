@@ -1,10 +1,10 @@
-div.container {
-  aside {
-    text-align: center;
-    vertical-align: top;
+@import "alchemy/composites/shell";
+@import "alchemy/composites/login";
 
-    div.logo {
-      margin-top: -70px;
-    }
-  }
+html, body {
+  background: white;
+}
+
+article .container aside {
+  @include background-image(linear-gradient(to bottom, #393f44 0%, #393f44 100%));
 }
