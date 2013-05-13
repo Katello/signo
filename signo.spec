@@ -270,7 +270,7 @@ test -f $TOKEN || (echo $(</dev/urandom tr -dc A-Za-z0-9 | head -c128) > $TOKEN 
 %if 0%{?rhel} == 6
 %{_sysconfdir}/rc.d/init.d/%{name}
 %else
-%{_libdir}/systemd/system/%{name}.service
+/usr/lib/systemd/system/%{name}.service
 %endif
 
 %{_sysconfdir}/sysconfig/%{name}
