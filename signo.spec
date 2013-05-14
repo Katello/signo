@@ -187,6 +187,11 @@ install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{_initddir}/%{name}
 install -Dp -m0755 %{confdir}/%{name}.service %{buildroot}/usr/lib/systemd/system/%{name}.service
 %endif
 
+# we must remove Require all granted line from Apache config for RHEL in order to serve static assets
+# however on Fedora 18 this line must be present
+%if 0%{?rhel} == 6
+  sed -i '/Require all granted/d' %{buildroot}%{_sysconfdir}/httpd/conf.d/katello.d/%{name}.conf
+%endif
 
 #overwrite config files with symlinks to /etc/signo
 ln -svf %{_sysconfdir}/%{name}/sso.yml %{buildroot}%{homedir}/config/sso.yml
