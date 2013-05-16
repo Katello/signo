@@ -125,5 +125,8 @@ development:
         pattern: "[%5l %d %c] %m\n"
 
 test:
+  :backends:
+    :katello:
+      :url: https://localhost/katello/authenticate
 production:
 build:
