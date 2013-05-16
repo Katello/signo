@@ -13,8 +13,11 @@ class LoginController < ApplicationController
     if is_logged_in? && cookies[:username].blank?
       cookies[:username] = current_username
       redirect_to return_url
+    elsif is_logged_in? && params[:return_url]
+      redirect_to return_url
     else
-      session[:return_url] = params[:return_url]
+      set_notice
+      session[:return_url] = params[:return_url] if params[:return_url].present?
     end
   end
 
@@ -88,10 +91,24 @@ class LoginController < ApplicationController
 
   def logout
     session[:username] = nil
-    redirect_to return_url
+    session[:return_url] = params[:return_url] if params[:return_url].present?
+    redirect_to root_path(:notice => 'logout')
   end
 
   private
+
+  def set_notice
+    case params[:notice]
+      when 'logout'
+        flash.now[:success] = _('You have been logged out')
+      when 'expired'
+        flash.now[:warning] = _('Your session has expired, please login again')
+      when nil, ''
+        # ignore these cases completely
+      else
+        raise ArgumentError, "unsupported notice '#{params[:notice]}'"
+    end
+  end
 
   def is_logged_in?
     current_username.present?

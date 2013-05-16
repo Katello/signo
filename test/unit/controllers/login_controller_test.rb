@@ -11,12 +11,46 @@ describe LoginController do
       it { response.must_be :success? }
     end
 
+    context "logout notice is displayed" do
+      before { get :index, :notice => 'logout' }
+      it { response.must_be :success? }
+      it { flash[:success].wont_be_nil }
+    end
+
+    context "expired notice is displayed" do
+      before { get :index, :notice => 'expired' }
+      it { response.must_be :success? }
+      it { flash[:warning].wont_be_nil }
+    end
+
     context "return_url set" do
       let(:url) { 'https://localhost' }
       before { get :index, :return_url => url }
 
       it "should store url to session" do
         session[:return_url].must_equal(url)
+      end
+    end
+
+    context "user is logged in" do
+      let(:url) { 'https://localhost/katello/some/action' }
+      before { session[:username] = 'admin' }
+
+      context "return_url parameter provided" do
+        before { get :index, :return_url => url }
+
+        it { response.must_be :redirect? }
+        it { response.redirect_url.must_include(url) }
+      end
+
+      context "cookie is not set" do
+        before do
+          cookies.delete(:username)
+          get :index
+        end
+
+        it { cookies[:username].must_equal username }
+        it { response.must_be :redirect? }
       end
     end
   end
@@ -134,6 +168,30 @@ describe LoginController do
           flash[:error].must_be :present?
           response.must_be :redirect?
         end
+      end
+    end
+  end
+
+  describe "#logout" do
+    context "user is logged in" do
+      before { session[:username] = username }
+
+      context "user logouts without return url" do
+        before { get :logout }
+
+        it { response.must_be :redirect? }
+        it { response.redirect_url.must_include root_path(:notice => 'logout') }
+        it { session[:username].must_be_nil }
+      end
+
+      context "user logouts and sets return url" do
+        let(:url) { 'https://localhost/katello/whatever' }
+        before { get :logout, :return_url => url }
+
+        it { response.must_be :redirect? }
+        it { response.redirect_url.must_include root_path(:notice => 'logout') }
+        it { session[:username].must_be_nil }
+        it { session[:return_url].must_equal url }
       end
     end
   end
