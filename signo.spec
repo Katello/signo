@@ -64,6 +64,7 @@ Requires:  %{?scl_prefix}rubygem(ui_alchemy-rails) >= 1.0.4
 Requires:  %{?scl_prefix}rubygem(jquery-rails) >= 1.0.3
 Requires:  %{?scl_prefix}rubygem(net-ldap)
 Requires:  %{?scl_prefix}rubygem(logging) >= 1.8.0
+Requires:  lsof
 
 BuildRequires: %{?scl_prefix}ruby(abi) = 1.9.1
 BuildRequires: %{?scl_prefix}ruby
