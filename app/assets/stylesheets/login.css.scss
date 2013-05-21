@@ -1,10 +1,9 @@
+$login_background_top_color: #0098c2;
+$login_background_bottom_color: #00485c;
+
 @import "alchemy/composites/shell";
 @import "alchemy/composites/login";
 
-html, body {
-  background: white;
-}
-
 article .container aside {
-  @include background-image(linear-gradient(to bottom, #393f44 0%, #393f44 100%));
+  @include background-image(linear-gradient(to bottom, #0098c2 0%, #00485c 100%));
 }
