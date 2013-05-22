@@ -5,5 +5,5 @@ $login_background_bottom_color: #00485c;
 @import "alchemy/composites/login";
 
 article .container aside {
-  @include background-image(linear-gradient(to bottom, #0098c2 0%, #00485c 100%));
+  @include background-image(linear-gradient(to bottom, $login_background_top_color 0%, $login_background_bottom_color 100%));
 }
