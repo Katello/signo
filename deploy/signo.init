@@ -105,9 +105,10 @@ start() {
 stop() {
     echo -n $"Stopping $prog: "
     $THIN --config /etc/signo/thin.yml stop >/dev/null
-    for P in $( seq $THIN_PORT $(( $THIN_PORT + $THIN_SERVERS - 1)) ); do
-        if [ -f $PID_DIR/thin.$P.pid ]; then
-            killproc -p $PID_DIR/thin.$P.pid
+    for SIGNO_PID in $SIGNO_PIDS
+    do
+        if [ -f ${SIGNO_PID} ]; then
+            killproc -p ${SIGNO_PID}
         fi
     done
     echo
