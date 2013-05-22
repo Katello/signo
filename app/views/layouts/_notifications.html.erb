@@ -2,8 +2,11 @@
   <div class="flash_hud">
     <div class="control">
     </div>
-    <ul class="error">
-      <li><%= flash[:error] %></li>
-    </ul>
+
+    <% flash.keys.each do |key| %>
+      <ul class="<%= key %>">
+        <li><%= flash[key] %></li>
+      </ul>
+    <% end %>
   </div>
 </div>
