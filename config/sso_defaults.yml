@@ -17,6 +17,9 @@
   # suburi on which signo resides
   url_prefix: '/signo'
 
+  # mode of katello deploy, possible values are katello and headpin
+  app_mode: katello
+
   # configuration of all authentication backends
   :backends:
     # these backends will be used to authenticate user (order is significant)
