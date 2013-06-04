@@ -1,0 +1,12 @@
+language:
+  - ruby
+
+rvm:
+  - "1.9.3"
+
+before_install:
+  - touch config/sso.yml
+
+script:
+  - "rake minitest:unit"
+

@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 
+SimpleCov.root Rails.root
 require "minitest/autorun"
 require "minitest/rails"
 require 'webmock/minitest'
