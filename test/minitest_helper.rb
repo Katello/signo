@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start 'rails'
+
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 
@@ -54,3 +57,7 @@ end
 # Test subjects ending with 'Controller' are treated as functional tests
 #   e.g. describe TestController do ...
 MiniTest::Spec.register_spec_type(/Controller$/, ControllerSpec)
+
+SimpleCov.root Rails.root
+SimpleCov.coverage_dir "doc/coverage"
+
