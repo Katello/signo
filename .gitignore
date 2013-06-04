@@ -10,3 +10,4 @@ bundler.d/local*
 locale/*/*.pox
 locale/*/LC_MESSAGES
 locale/*.mo
+coverage/*
