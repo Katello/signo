@@ -37,7 +37,7 @@
       ## baseDN for ldap auth, eg dc=redhat,dc=com
       base_dn: ou=People,dc=my-domain,dc=com
       ##baseDN for your ldap groups, eg ou=Groups,dc=redhat,dc=com
-      group_base: ou=Groupd,dc=my-domain,dc=com
+      group_base: ou=Groups,dc=my-domain,dc=com
       ## type of server. default == posix. :active_directory, :posix, :free_ipa
       server_type: :posix
       ## domain for your users if using active directory, eg redhat.com

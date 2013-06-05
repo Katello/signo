@@ -5,4 +5,5 @@ end
 group :test do
   # Requests stubbing
   gem 'webmock'
+  gem 'simplecov'
 end
