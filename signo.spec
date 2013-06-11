@@ -257,7 +257,6 @@ test -f $TOKEN || (echo $(</dev/urandom tr -dc A-Za-z0-9 | head -c128) > $TOKEN 
 %{homedir}/log
 %{homedir}/public/*.html
 %{homedir}/public/*.txt
-%{homedir}/public/*.ico
 %{homedir}/public/assets
 %{homedir}/public/javascripts
 %{homedir}/public/stylesheets
