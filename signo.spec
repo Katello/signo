@@ -51,6 +51,7 @@ BuildRequires:  %{?scl_prefix}rubygem(thin)
 BuildRequires:  %{?scl_prefix}rubygem(webmock)
 BuildRequires:  %{?scl_prefix}rubygem(minitest)
 BuildRequires:  %{?scl_prefix}rubygem(minitest-rails)
+BuildRequires:  %{?scl_prefix}rubygem(simplecov)
 
 BuildRequires:  gettext
 BuildRequires:  translate-toolkit
