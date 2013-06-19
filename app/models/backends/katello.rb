@@ -19,7 +19,9 @@ class Backends::Katello < Backends::Base
   end
 
   def do_auth
-    uri          = URI.parse("#{auth_url}?username=#{username}&password=#{password}")
+    username_esc = URI.escape(username)
+    password_esc = URI.escape(password)
+    uri          = URI.parse("#{auth_url}?username=#{username_esc}&password=#{password_esc}")
     http         = Net::HTTP.new(uri.host, uri.port)
     if uri.scheme == 'https' || Configuration.config.enforce_ssl
       http.use_ssl = true 

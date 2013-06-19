@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'test_helper'
 
 describe Backends::Katello do
@@ -29,6 +30,21 @@ describe Backends::Katello do
       it "returns false" do
         Configuration.config.backends.katello.stub :url, url do
           authentication.must_equal false
+        end
+      end
+    end
+
+    describe "wide characters in credentials" do
+      let(:wide_username) { "ářěš" }
+      let(:wide_password) { "šwórď" }
+      before do
+        stub_request(:get, "#{url}?password=#{URI.escape(wide_password)}&username=#{URI.escape(wide_username)}").
+            to_return(:status => 200, :body => "", :headers => {})
+      end
+
+      it "escapes credentials" do
+        Configuration.config.backends.katello.stub :url, url do
+          Backends::Katello.new.authenticate(User.new(wide_username, wide_password))
         end
       end
     end
