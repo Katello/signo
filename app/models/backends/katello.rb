@@ -33,6 +33,10 @@ class Backends::Katello < Backends::Base
     logger.error "An error #{e.class} occured with message #{e.message}"
     logger.error e.backtrace.join("\n")
     # @response will be nil and will result in false
+  rescue OpenSSL::SSL::SSLError => e
+    logger.error "An SSL error #{e.class} occured with message #{e.message}"
+    logger.error "check whether #{auth_url} certificate is trusted by CA #{Configuration.config.ca_file}"
+    logger.error e.backtrace.join("\n")
   end
 
   def check_result
