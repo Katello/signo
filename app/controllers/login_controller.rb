@@ -69,7 +69,7 @@ class LoginController < ApplicationController
           # cookie says identifies another that current user, current user has precedence
           # we reset cookie and let the process begin again from RP
           cookies[:username] = current_username
-          redirect_to params[:"openid.return_to"]
+          redirect_to Url.new(params[:"openid.return_to"]).add_username(current_username).to_s
           return
         else
           # we make sure cookie is set and response to OpenID auth request
@@ -110,19 +110,6 @@ class LoginController < ApplicationController
     end
   end
 
-  def is_logged_in?
-    current_username.present?
-  end
-
-  def current_username
-    session[:username]
-  end
-
-  def is_authorized(relay_party)
-    domain = URI.parse(relay_party).host
-    ::Configuration.config.whitelist.include?(domain)
-  end
-
   def render_response(oidresp)
     if oidresp.needs_signing
       signed_response = server.signatory.sign(oidresp)
@@ -133,7 +120,7 @@ class LoginController < ApplicationController
       when HTTP_OK
         render :text => web_response.body, :status => 200
       when HTTP_REDIRECT
-        redirect_to sslize(web_response.headers['location'])
+        redirect_to Url.new(web_response.headers['location']).sslize.to_s
       else
         render :text => web_response.body, :status => 400
     end
@@ -153,18 +140,7 @@ class LoginController < ApplicationController
   end
 
   def return_url
-    sslize(params[:return_url] || session[:return_url] || root_path)
+    url = Url.new(params[:return_url] || session[:return_url] || root_path)
+    url.sslize.add_username(current_username).to_s
   end
-
-  # if a RP uses rack <= 1.2 it does not detect url scheme correctly when it's behind proxy
-  # so we'd redirect back to https app with http request
-  # because of that we must ensure we use https if it's turned on in configuration
-  def sslize(url)
-    if ::Configuration.config.enforce_ssl
-      url = URI.parse(url)
-      url.scheme = 'https'
-    end
-    url.to_s
-  end
-
 end
