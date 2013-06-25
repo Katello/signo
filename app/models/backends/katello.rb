@@ -26,7 +26,8 @@ class Backends::Katello < Backends::Base
     if uri.scheme == 'https' || Configuration.config.enforce_ssl
       http.use_ssl = true 
       http.ca_file = Configuration.config.ca_file
-      http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      strict = Configuration.config.backends.katello.verify_certificate
+      http.verify_mode = strict ? OpenSSL::SSL::VERIFY_PEER : OpenSSL::SSL::VERIFY_NONE
     end
     request      = Net::HTTP::Get.new(uri.request_uri)
     @response    = http.request(request)
