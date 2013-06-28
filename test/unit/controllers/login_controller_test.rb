@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'test_helper'
 
 describe LoginController do
@@ -60,6 +61,8 @@ describe LoginController do
       before do
         stub_request(:get, "https://localhost/katello/authenticate?password=#{password}&username=#{username}").
             to_return(:status => 200, :body => "", :headers => {})
+        stub_request(:get, "https://localhost/katello/authenticate?password=#{password}&username=%C3%A1%C5%99%C4%9B%C5%A1").
+            to_return(:status => 200, :body => "", :headers => {})
         Configuration.config.backends.stub :enabled, [:katello] do
           post :login, :username => username, :password => password
         end
@@ -80,7 +83,34 @@ describe LoginController do
           end
         end
 
-        it { response.redirect_url.must_equal url }
+        it { response.redirect_url.must_include url }
+        it { response.redirect_url.must_include "?username=#{username}"}
+      end
+
+      context "with return url in session with extra parameter" do
+        let(:url) { 'https://localhost/test?something=isset' }
+        before do
+          session[:return_url] = url
+          Configuration.config.backends.stub :enabled, [:katello] do
+            post :login, :username => username, :password => password
+          end
+        end
+
+        it { response.redirect_url.must_include url }
+        it { response.redirect_url.must_include "?something=isset"}
+        it { response.redirect_url.must_include "&username=#{username}"}
+      end
+
+      context "with return url in sessions and wide characters username" do
+        let(:url) { 'https://localhost/test' }
+        before do
+          session[:return_url] = url
+          Configuration.config.backends.stub :enabled, [:katello] do
+            post :login, :username => "ářěš", :password => password
+          end
+        end
+
+        it { response.redirect_url.must_include "?username=%C3%A1%C5%99%C4%9B%C5%A1"}
       end
     end
 
@@ -153,7 +183,7 @@ describe LoginController do
         it "fixes cookie and redirects back to relay party" do
           response.must_be :redirect?
           cookies[:username].must_equal username
-          response.redirect_url.must_equal('https://localhost/katello/')
+          response.redirect_url.must_equal("https://localhost/katello/?username=#{username}")
           response.redirect_url.wont_include('id_res')
         end
       end

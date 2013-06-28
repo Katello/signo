@@ -29,6 +29,9 @@
     :katello:
       # on which url we should authenticate users against katello 
       :url: https://<%= Socket.gethostname %>/katello/authenticate
+      # should we check correct CNAME and issuer trust?
+      # turning off implies security issues! use only for testing
+      :verify_certificate: true
     :ldap:
       host: localhost
       port: 389
