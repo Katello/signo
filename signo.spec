@@ -51,6 +51,7 @@ BuildRequires:  %{?scl_prefix}rubygem(thin)
 BuildRequires:  %{?scl_prefix}rubygem(webmock)
 BuildRequires:  %{?scl_prefix}rubygem(minitest)
 BuildRequires:  %{?scl_prefix}rubygem(minitest-rails)
+BuildRequires:  %{?scl_prefix}rubygem(simplecov)
 
 BuildRequires:  gettext
 BuildRequires:  translate-toolkit
@@ -187,7 +188,7 @@ install -Dp -m0644 %{confdir}/thin.yml %{buildroot}%{_sysconfdir}/%{name}/
 %if 0%{?rhel} == 6
 install -Dp -m0755 %{confdir}/%{name}.init %{buildroot}%{_initddir}/%{name}
 %else
-install -Dp -m0755 %{confdir}/%{name}.service %{buildroot}/usr/lib/systemd/system/%{name}.service
+install -Dp -m0755 %{confdir}/%{name}.service %{buildroot}%{_libdir}/systemd/system/%{name}.service
 %endif
 
 # we must remove Require all granted line from Apache config for RHEL in order to serve static assets
@@ -277,7 +278,7 @@ test -f $TOKEN || (echo $(</dev/urandom tr -dc A-Za-z0-9 | head -c128) > $TOKEN 
 %if 0%{?rhel} == 6
 %{_sysconfdir}/rc.d/init.d/%{name}
 %else
-/usr/lib/systemd/system/%{name}.service
+%{_libdir}/systemd/system/%{name}.service
 %endif
 
 %{_sysconfdir}/sysconfig/%{name}
