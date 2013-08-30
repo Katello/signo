@@ -69,7 +69,12 @@ Requires:  %{?scl_prefix}rubygem(logging) >= 1.8.0
 Requires:  lsof
 %endif
 
-BuildRequires: %{?scl_prefix}ruby(abi) = 1.9.1
+%if 0%{?fedora} > 18
+BuildRequires:       %{?scl_prefix}ruby(release)
+%else
+BuildRequires:       %{?scl_prefix}ruby(abi) = 1.9.1
+%endif
+
 BuildRequires: %{?scl_prefix}ruby
 
 Requires(pre):    shadow-utils
