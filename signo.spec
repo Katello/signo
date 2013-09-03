@@ -49,8 +49,6 @@ BuildRequires:  %{?scl_prefix}rubygem(ui_alchemy-rails) >= 1.0.4
 BuildRequires:  %{?scl_prefix}rubygem(ruby-openid)
 BuildRequires:  %{?scl_prefix}rubygem(thin)
 BuildRequires:  %{?scl_prefix}rubygem(webmock)
-BuildRequires:  %{?scl_prefix}rubygem(minitest)
-BuildRequires:  %{?scl_prefix}rubygem(minitest-rails)
 BuildRequires:  %{?scl_prefix}rubygem(simplecov)
 
 BuildRequires:  gettext
@@ -97,7 +95,7 @@ Web based SSO for various applications
 %package   katello
 Summary:   Signo integration to Katello
 BuildArch: noarch
-Requires:  katello-common 
+Requires:  katello-common
 
 %description katello
 Signo-Katello integration configuration. It sets Apache configuration file that
@@ -112,25 +110,14 @@ Requires:        %{?scl_prefix}rubygem(gettext) >= 1.9.3
 %description devel
 Rake tasks and dependecies for Signo developers
 
-%package devel-test
-Summary:         Signo devel support (testing)
-BuildArch:       noarch
-Requires:        %{name} = %{version}-%{release}
-Requires:        %{name}-devel = %{version}-%{release}
-# dependencies from bundler.d/test.rb
-BuildRequires:        %{?scl_prefix}rubygem(webmock)
-BuildRequires:        %{?scl_prefix}rubygem(minitest)
-BuildRequires:        %{?scl_prefix}rubygem(minitest-rails)
-
-%description devel-test
-Rake tasks and dependecies for Signo developers, which enables
-testing.
-
 %prep
 %setup -n %{name}-%{version} -q
 
 %build
+
 export RAILS_ENV=build
+#remove test.rb
+rm -f bundler.d/test.rb
 
 #replace shebangs for SCL
 %if %{?scl:1}%{!?scl:0}
@@ -209,6 +196,7 @@ ln -svf %{_sysconfdir}/%{name}/sso.yml %{buildroot}%{homedir}/config/sso.yml
 ln -sv %{_localstatedir}/log/%{name} %{buildroot}%{homedir}/log
 ln -sv %{datadir}/openid-store %{buildroot}%{homedir}/db/openid-store
 ln -sv %{datadir}/tmp %{buildroot}%{homedir}/tmp
+
 
 #remove files which are not needed in the homedir
 find %{buildroot}%{homedir} -name .gitkeep -exec rm -f {} \;
@@ -300,9 +288,6 @@ test -f $TOKEN || (echo $(</dev/urandom tr -dc A-Za-z0-9 | head -c128) > $TOKEN 
 
 %files devel
 # this package just installs dependencies for I18n
-
-%files devel-test
-%{homedir}/bundler.d/test.rb
 
 %preun
 if [ $1 -eq 0 ] ; then
