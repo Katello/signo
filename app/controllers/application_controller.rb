@@ -13,6 +13,6 @@ class ApplicationController < ActionController::Base
 
   def is_authorized(relay_party)
     domain = URI.parse(relay_party).host
-    ::Configuration.config.whitelist.include?(domain)
+    ::Configuration.config.whitelist.map(&:downcase).include?(domain.downcase)
   end
 end
