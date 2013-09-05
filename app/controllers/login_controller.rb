@@ -21,16 +21,33 @@ class LoginController < ApplicationController
     end
   end
 
+
   def login
     user = User.new(params[:username], params[:password])
     if user.authenticate
-      session[:username] = user.username
-      cookies[:username] = { :value   => current_username,
-                             :expires => ::Configuration.config.cookie_life.hours.from_now }
-      redirect_to return_url
+      respond_to do |format|
+        format.html do
+          session[:username] = user.username
+          cookies[:username] = { :value   => current_username,
+                                 :expires => ::Configuration.config.cookie_life.hours.from_now }
+          redirect_to return_url
+        end
+
+        format.json do
+          render :json => {}, :status => 200
+        end
+      end
     else
-      flash.now[:error] = _('Authentication failed, try again')
-      render :action => 'index'
+      respond_to do |format|
+        format.html do
+          flash.now[:error] = _('Authentication failed, try again')
+          render :action => 'index'
+        end
+
+        format.json do
+          render :json => {}, :status => 401
+        end
+      end
     end
   end
 
