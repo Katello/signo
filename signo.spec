@@ -265,8 +265,8 @@ test -f $TOKEN || (echo $(</dev/urandom tr -dc A-Za-z0-9 | head -c128) > $TOKEN 
 %{homedir}/config.ru
 %{homedir}/Gemfile
 %{homedir}/Rakefile
-%attr(600, signo, signo) %{_sysconfdir}/%{name}/thin.yml
-%attr(600, signo, signo) %{_sysconfdir}/%{name}/sso.yml
+%config(noreplace) %attr(600, signo, signo) %{_sysconfdir}/%{name}/thin.yml
+%config(noreplace) %attr(600, signo, signo) %{_sysconfdir}/%{name}/sso.yml
 
 %if 0%{?rhel} == 6
 %{_sysconfdir}/rc.d/init.d/%{name}
