@@ -80,7 +80,7 @@ class LoginController < ApplicationController
       identity = oidreq.identity
 
       if is_authorized(oidreq.trust_root)
-        req_identity = identity.split('/').last
+        req_identity = CGI.unescape(identity.split('/').last)
 
         if current_username != req_identity
           # cookie says identifies another that current user, current user has precedence
